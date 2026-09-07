@@ -1,0 +1,25 @@
+name: CI & Docker Build
+on:
+  push:
+    branches: ["**"]
+
+jobs:
+    test-and-build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+                
+            - name: Validate HTML
+              run: npx htmlhint *.html
+            
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            - name: Build Docker Image
+              uses: docker/build-push-action@v5
+              with:
+                context: .
+                file: ./Dockerfile
+                push: false
